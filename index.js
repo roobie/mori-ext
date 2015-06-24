@@ -1,1 +1,1 @@
-module.exports = require('./pkg/lib.js');
+module.exports = require('./pkg/mori-exts');

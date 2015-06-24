@@ -1,6 +1,8 @@
 # mori-ext
 [Function bind syntax](https://github.com/zenparsing/es-function-bind) wrappers for [mori](http://swannodette.github.io/mori)
 
+### immutable data structures + LINQ in javascript
+
 ```
 \__   __ \_______ \______   \___         \_______ \__  \__ \_______
 |  |_|  ||       ||    _ |  |   |        |       ||  |_|  ||       |
@@ -33,6 +35,8 @@ This effort is inspired by [trine](https://github.com/jussi-kalliokoski/trine)
 ## Installation
 
 npm install --save mori-ext
+
+see https://www.npmjs.com/package/mori-ext
 
 #### Dependencies
 mori,

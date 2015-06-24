@@ -2,14 +2,15 @@
 [Function bind syntax](https://github.com/zenparsing/es-function-bind) wrappers for [mori](http://swannodette.github.io/mori)
 
 ```
-._____ ______   ________  ________  ___
-|\   _ \  _   \|\   __  \|\   __  \|\  \
-\ \  \\\__\ \  \ \  \|\  \ \  \|\  \ \  \
- \ \  \\|__| \  \ \  \\\  \ \   _  _\ \  \
-  \ \  \    \ \  \ \  \\\  \ \  \\  \\ \  \
-   \ \__\    \ \__\ \_______\ \__\\ _\\ \__\
-    \|__|     \|__|\|_______|\|__|\|__|\|__/ - ext
+\__   __ \_______ \______   \___         \_______ \__  \__ \_______
+|  |_|  ||       ||    _ |  |   |        |       ||  |_|  ||       |
+|       ||   _   ||   | ||  |   |  ____  |    ___||       ||_     _|
+|       ||  | |  ||   |_||_ |   | |____| |   |___ |       |  |   |  
+|       ||  |_|  ||    __  ||   |        |    ___| |     |   |   |  
+| ||_|| ||       ||   |  | ||   |        |   |___ |   _   |  |   |  
+|_|   |_||_______||___|  |_||___|        |_______||__| |__|  |___|  
 ```
+thanks http://patorjk.com/software/taag
 
 
 #### Quick example
@@ -26,6 +27,8 @@ Using [babeljs](https://babeljs.io/) everyone can use this syntax.
 [Look at an example using gulp](https://github.com/roobie/mori-ext/blob/master/gulpfile.js#L28-L32)
 
 Also, copy the [`.babelrc`](https://github.com/roobie/mori-ext/blob/master/.babelrc) file, in order to enable the required language features in `babeljs`.
+
+This effort is inspired by [trine](https://github.com/jussi-kalliokoski/trine)
 
 ## Installation
 

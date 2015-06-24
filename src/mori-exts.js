@@ -11,7 +11,11 @@ const binaryFunc = function (name) {
   };
 };
 
-// variadicFunc
+const variadicFunc = function (name) {
+  return function variadic() {
+    return mori[name](this, ...arguments);
+  };
+};
 
 // Fundamentals
 export const equals = binaryFunc('equals');
@@ -31,6 +35,11 @@ export const isIndexed = unaryFunc('isIndexed');
 export const isReduceable = unaryFunc('isReduceable');
 export const isSeqable = unaryFunc('isSeqable');
 export const isReversible = unaryFunc('isReversible');
+
+// Collections
+
+// Collection Operations
+export const conj = variadicFunc('conj');
 
 /*
 Fundamentals

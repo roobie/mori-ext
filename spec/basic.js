@@ -7,7 +7,10 @@ import {
   hash,
 
   isList,
-  isSeq
+  isSeq,
+
+
+  conj
 } from '../src/mori-exts';
 
 const should = function () {
@@ -41,6 +44,19 @@ describe('mori type predicates', function () {
     it('should check whether collection is a seq', function () {
       void mori.seq([1, 2, 3])::isSeq()::should().be.true;
       void mori.vector(1, 2, 3)::isSeq()::should().be.false;
+    });
+  });
+});
+
+
+describe('mori collection operations', function () {
+  describe('::conj', function () {
+    it('should conjoin the supplied item(s) to the collection', function () {
+      void mori.vector(1, 2)::conj(3, 4, 5)::equals(mori.vector(1, 2, 3, 4, 5))
+        ::should().be.true;
+
+      void mori.list(4, 5)::conj(3, 2, 1)::equals(mori.vector(1, 2, 3, 4, 5))
+        ::should().be.true;
     });
   });
 });

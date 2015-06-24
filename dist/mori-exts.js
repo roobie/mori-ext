@@ -1,5 +1,7 @@
 'use strict';
 
+var _slice = require('babel-runtime/helpers/slice')['default'];
+
 var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
 Object.defineProperty(exports, '__esModule', {
@@ -21,7 +23,11 @@ var binaryFunc = function binaryFunc(name) {
     };
 };
 
-// variadicFunc
+var variadicFunc = function variadicFunc(name) {
+    return function variadic() {
+        return _mori2['default'][name].apply(_mori2['default'], [this].concat(_slice.call(arguments)));
+    };
+};
 
 // Fundamentals
 var equals = binaryFunc('equals');
@@ -55,6 +61,12 @@ exports.isReduceable = isReduceable;
 var isSeqable = unaryFunc('isSeqable');
 exports.isSeqable = isSeqable;
 var isReversible = unaryFunc('isReversible');
+
+exports.isReversible = isReversible;
+// Collections
+
+// Collection Operations
+var conj = variadicFunc('conj');
 
 /*
 Fundamentals
@@ -183,4 +195,4 @@ Helpers
     toClj
     toJs
 */
-exports.isReversible = isReversible;
+exports.conj = conj;

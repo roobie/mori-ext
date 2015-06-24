@@ -32,7 +32,7 @@ gulp.task("js", function () {
 });
 
 gulp.task('watch-js', function () {
-    gulp.watch(['src/*.js'], ['js', 'test']);
+    gulp.watch(['src/*.js'], ['js', 'spec']);
 });
 
 gulp.task('spec', function () {

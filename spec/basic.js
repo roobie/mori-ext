@@ -128,7 +128,7 @@ import {
   fnil,
   toClj,
   toJs,
-} from '../src/mori-exts';
+} from '../src/mori-ext';
 
 const should = function () {
   // thin wrapper around expect, so we can:

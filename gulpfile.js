@@ -9,7 +9,7 @@ require('babel-core/register');
 
 
 gulp.task('lint', function () {
-  gulp.src(['src/*.js', 'test/*.js'])
+  gulp.src(['src/*.js', 'spec/*.js'])
     // eslint() attaches the lint output to the eslint property
     // of the file object so it can be used by other modules.
     .pipe(eslint())
@@ -22,7 +22,7 @@ gulp.task('lint', function () {
 });
 
 gulp.task('watch-lint', function () {
-    gulp.watch(['src/*.js', 'test/*.js'], ['lint']);
+    gulp.watch(['src/*.js', 'spec/*.js'], ['lint']);
 });
 
 gulp.task("js", function () {
@@ -35,22 +35,22 @@ gulp.task('watch-js', function () {
     gulp.watch(['src/*.js'], ['js', 'test']);
 });
 
-gulp.task('test', function () {
-  return gulp.src('test/*.js', {read: false})
+gulp.task('spec', function () {
+  return gulp.src('spec/*.js', {read: false})
     // gulp-mocha needs filepaths so you can't have any plugins before it
     .pipe(mocha({reporter: 'nyan'}));
 });
 
-gulp.task('watch-test', function () {
-    gulp.watch(['test/*.js'], ['js', 'test']);
+gulp.task('watch-spec', function () {
+    gulp.watch(['spec/*.js'], ['js', 'spec']);
 });
 
 
 gulp.task("default", [
   'lint',
   'watch-lint',
-  'test',
-  'watch-test',
+  'spec',
+  'watch-spec',
   'js',
   'watch-js'
 ]);

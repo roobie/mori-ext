@@ -214,8 +214,8 @@ describe(`mori sequences`, function () {
   describe('::cons', function () {
     it('should construct a new sequence', function () {
       1::cons(mori.vector(2, 3))::toJs()::should().deep.equal([1, 2, 3]);
-    })
-  })
+    });
+  });
 
   describe(`::partition`, function () {
     it(`should partition the collection`, function () {

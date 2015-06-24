@@ -19,4 +19,9 @@ describe('mori fundamentals', function () {
       mori.list(1, 2, 3)::equals(mori.vector(1, 2, 3))::should().be.equal(true);
     });
   });
+  describe('::hash', function () {
+    it('should report true when collections are eq', function () {
+      void mori.list(1, 2, 3)::hash()::should().be.defined;
+    });
+  });
 });

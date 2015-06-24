@@ -1,18 +1,36 @@
 import mori from 'mori';
 
+// Internal Helpers
 const unaryFunc = function (name) {
-  return function unary() {
+  return function _unary() {
     return mori[name](this);
   };
 };
-const binaryFunc = function (name) {
-  return function binary(p) {
+const binaryFunc = function (name, rev) {
+  return rev ?
+  function _binaryRev(p) {
+    return mori[name](p, this);
+  } :
+  function _binary(p) {
     return mori[name](this, p);
   };
 };
+const ternaryFunc = function (name, rev) {
+  return rev ?
+  function _ternaryRev(a, b) {
+    return mori[name](a, b, this);
+  } :
+  function _ternary(a, b) {
+    return mori[name](this, a, b);
+  };
+};
 
-const variadicFunc = function (name) {
-  return function variadic() {
+const variadicFunc = function (name, rev) {
+  return rev ?
+  function _variadicRev() {
+    return mori[name](...arguments, this);
+  } :
+  function _variadic() {
     return mori[name](this, ...arguments);
   };
 };
@@ -20,6 +38,7 @@ const variadicFunc = function (name) {
 // Fundamentals
 export const equals = binaryFunc('equals');
 export const hash = unaryFunc('hash');
+// --
 
 // Type Predicates
 export const isList = unaryFunc('isList');
@@ -35,136 +54,134 @@ export const isIndexed = unaryFunc('isIndexed');
 export const isReduceable = unaryFunc('isReduceable');
 export const isSeqable = unaryFunc('isSeqable');
 export const isReversible = unaryFunc('isReversible');
+// --
 
 // Collections
+// --
 
 // Collection Operations
 export const conj = variadicFunc('conj');
+export const into = binaryFunc('into');
+export const assoc = variadicFunc('assoc');
+export const dissoc = variadicFunc('dissoc');
+export const distinct = unaryFunc('distinct');
+export const empty = unaryFunc('empty');
+export const get = ternaryFunc('get');
+export const getIn = ternaryFunc('getIn');
+export const hasKey = binaryFunc('hasKey ');
+export const find = binaryFunc('find');
+export const nth = binaryFunc('nth');
+export const last = unaryFunc('last');
+export const assocIn = ternaryFunc('assocIn');
+export const updateIn = ternaryFunc('updateIn');
+export const count = unaryFunc('count');
+export const isEmpty = unaryFunc('isEmpty');
+export const peek = unaryFunc('peek');
+export const pop = unaryFunc('pop');
+export const zipmap = binaryFunc('zipmap');
+export const reverse = unaryFunc('reverse');
+// --
 
-/*
-Fundamentals
+// Vector Operations
+export const subvec = ternaryFunc('subvec');
+// --
 
-    equals
-    hash
+// Hash Map Operations
+export const keys = unaryFunc('keys');
+export const vals = unaryFunc('keys');
+export const merge = variadicFunc('keys');
+// --
 
-Type Predicates
+// Set Operations
+export const disj = unaryFunc('disj');
+export const union = variadicFunc('union');
+export const intersection = variadicFunc('intersection');
+export const difference = variadicFunc('difference');
+export const isSubset = binaryFunc('isSubset');
+export const isSuperset = binaryFunc('isSuperset');
+// --
 
-    isList
-    isSeq
-    isVector
-    isMap
-    isSet
-    isCollection
-    isSequential
-    isAssociative
-    isCounted
-    isIndexed
-    isReduceable
-    isSeqable
-    isReversible
+// Sequences
+export const first = unaryFunc('first');
+export const rest = unaryFunc('rest');
+export const seq = unaryFunc('seq');
 
-Collections
+// val first
+// 1::cons(mori.vector(2, 3))
+export const cons = binaryFunc('cons');
 
-    list
-    vector
-    hashMap
-    set
-    sortedSet
-    range
-    queue
+// function first
+// mori.range(3)::concat([3, 4, 5])
+export const concat = variadicFunc('concat');
 
-Collection Operations
+export const flatten = unaryFunc('flatten');
+export const intoArray = unaryFunc('intoArray');
+export const each = binaryFunc('each');
 
-    conj
-    into
-    assoc
-    dissoc
-    distinct
-    empty
-    get
-    getIn
-    hasKey
-    find
-    nth
-    last
-    assocIn
-    updateIn
-    count
-    isEmpty
-    peek
-    pop
-    zipmap
-    reverse
+// function first
+// mori.inc::map([0, 1, 2]) // => (1, 2, 3)
+export const map = variadicFunc('map');
 
-Vector Operations
+// function first
+// ((x, y) => mori.list(x, x + y))::mapcat(mori.seq('abc'), mori.seq('123'));
+export const mapcat = variadicFunc('mapcat');
 
-    subvec
+export const filter = binaryFunc('filter', true);
+export const remove = binaryFunc('remove', true);
 
-Hash Map Operations
+// function first
+export const reduce = ternaryFunc('reduce', true);
 
-    keys
-    vals
-    merge
+// function first
+export const reduceKV = ternaryFunc('reduceKV', true);
 
-Set Operations
+export const take = binaryFunc('take', true);
+export const takeWhile = binaryFunc('takeWhile', true);
+export const drop = binaryFunc('drop', true);
+export const dropWhile = binaryFunc('dropWhile', true);
+export const some = binaryFunc('some', true);
+export const every = binaryFunc('every', true);
 
-    disj
-    union
-    intersection
-    difference
-    isSubset
-    isSuperset
+// function first
+export const sort = binaryFunc('sort');
 
-Sequences
+// function first
+export const sortBy = ternaryFunc('sortBy');
+export const interpose = binaryFunc('interpose', true);
+export const interleave = variadicFunc('interleave');
 
-    first
-    rest
-    seq
-    cons
-    concat
-    flatten
-    intoArray
-    each
-    map
-    mapcat
-    filter
-    remove
-    reduce
-    reduceKV
-    take
-    takeWhile
-    drop
-    dropWhile
-    some
-    every
-    sort
-    sortBy
-    interpose
-    interleave
-    iterate
-    repeat
-    repeatedly
-    partition
-    partitionBy
-    groupBy
+// function first
+export const iterate = binaryFunc('iterate');
 
-Helpers
+// val first, first param  optional
+// 'foo'::repeat() // mori.repeat('foo')
+// 5::repeat('foo') // mori.repeat(5, 'foo')
+export const repeat = binaryFunc('repeat');
 
-    primSeq
-    identity
-    constantly
-    inc
-    dec
-    sum
-    isEven
-    isOdd
-    comp
-    juxt
-    knit
-    pipeline
-    partial
-    curry
-    fnil
-    toClj
-    toJs
-*/
+// function first, first param  optional
+export const repeatedly = binaryFunc('repeatedly');
+
+export const partition = variadicFunc('partition', true);
+export const partitionBy = binaryFunc('partitionBy', true);
+export const groupBy = binaryFunc('groupBy', true);
+// --
+
+// Helpers
+export const primSeq = variadicFunc('primSeq');
+export const identity = unaryFunc('identity');
+export const constantly = unaryFunc('constantly');
+export const inc = unaryFunc('inc');
+export const dec = unaryFunc('dec');
+export const sum = binaryFunc('sum');
+export const isEven = unaryFunc('isEven');
+export const isOdd = unaryFunc('isOdd');
+export const comp = binaryFunc('comp');
+export const juxt = variadicFunc('juxt');
+export const knit = variadicFunc('knit');
+export const pipeline = variadicFunc('pipeline');
+export const partial = variadicFunc('partial');
+export const curry = variadicFunc('curry');
+export const fnil = ternaryFunc('fnil');
+export const toClj = unaryFunc('toClj');
+export const toJs = unaryFunc('toJs');
+// --

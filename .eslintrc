@@ -23,4 +23,4 @@ rules:
   yoda: 0
 
   #Stylistic Issues
-  quotes: [1, "single"] #specify whether double or single quotes should be used
+  quotes: [0, "backtick"] #specify whether double or single quotes should be used

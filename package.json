@@ -19,7 +19,7 @@
     "url": "https://github.com/roobie/mori-ext/issues"
   },
   "homepage": "https://github.com/roobie/mori-ext#readme",
-  "dependecies": {
+  "dependencies": {
     "babel-runtime": "^5.6.4",
     "mori": "^0.3.2"
   },

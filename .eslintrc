@@ -1,0 +1,26 @@
+#last review done for eslint 0.16.1
+
+parser: babel-eslint
+
+ecmaFeatures:
+  arrowFunctions: true
+  blockBindings: true
+  defaultParams: true
+  destructuring: true
+  forOf: true
+  generators: true
+  modules: true
+  templateStrings: true
+
+env:
+  browser: true
+  es6: true
+  node: true
+
+rules:
+  #Variables
+  no-undef: 0 #disallow use of undeclared variables unless mentioned in a /*global */ block
+  yoda: 0
+
+  #Stylistic Issues
+  quotes: [1, "single"] #specify whether double or single quotes should be used

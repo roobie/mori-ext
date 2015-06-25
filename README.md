@@ -17,9 +17,12 @@ thanks http://patorjk.com/software/taag
 
 #### Quick example
 ```javascript
-const v1 = mori.vector('foo', 'bar', 'baz');
+import { vector } from 'mori';
+import { assoc, equals } from 'mori-ext';
+
+const v1 = vector('foo', 'bar', 'baz');
 const v2 = v1::assoc(1, 'quux');
-const v3 = mori.vector('foo', 'quux', 'baz');
+const v3 = vector('foo', 'quux', 'baz');
 v2::equals(v3); // => true
 ```
 
@@ -34,11 +37,11 @@ This effort is inspired by [trine](https://github.com/jussi-kalliokoski/trine)
 
 ## Installation
 
-npm install --save mori-ext
+`npm install --save mori-ext`
 
 see https://www.npmjs.com/package/mori-ext
 
-#### Dependencies
+#### runtime dependencies
 mori,
 babel-runtime,
 
@@ -51,7 +54,7 @@ babel-runtime,
 
 ```javascript
 import mori from 'mori';
-import { isList } from 'mori-ext';
+import { equals, isList } from 'mori-ext';
 
 const coll = mori.vector(1, 2, 3);
 
@@ -69,13 +72,15 @@ coll1::equals(coll2);
 However, not all functions operate on a single collection, or even, on collections at all, so some consideration has been taken into account, e.g.
 
 ```javascript
+import { list, vector, seq } from 'mori';
+import { mapcat, cons } from 'mori-ext';
 // mapcat
-((x, y) => mori.list(x, x + y))
-  ::mapcat(mori.seq('abc'), mori.seq('123'));
+((x, y) => list(x, x + y))
+  ::mapcat(seq('abc'), seq('123'));
 // => ('a' 'a1' 'b' 'b2' 'c' 'c3')
 
 // cons (converts collection into seq)
-1::cons(mori.vector(2, 3))
+1::cons(vector(2, 3))
 // => (1 2 3)
 ```
 

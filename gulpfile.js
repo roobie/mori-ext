@@ -41,7 +41,8 @@ gulp.task('spec', function () {
     .pipe(mocha({
       //reporter: 'spec'
       //reporter: 'nyan'
-      reporter: 'progress'
+      //reporter: 'progress'
+      reporter: 'min'
     }));
 });
 

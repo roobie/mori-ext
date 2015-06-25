@@ -139,34 +139,147 @@ const should = function () {
 describe(`mori fundamentals`, function () {
   describe(`::equals`, function () {
     it(`should report true when collections are eq`, function () {
-      void mori.list(1, 2, 3)::equals(mori.vector(1, 2, 3))::should().be.true;
+      void mori.list(1, 2, 3)::equals(mori.vector(1, 2, 3))
+        ::should().be.true;
     });
   });
   describe(`::hash`, function () {
     it(`should report true when collections are eq`, function () {
-      void mori.list(1, 2, 3)::hash()::should().be.defined;
+      void mori.list(1, 2, 3)::hash()
+        ::should().be.defined;
     });
   });
 });
 
 
 describe(`mori type predicates`, function () {
+  const coercedSeq = mori.seq([1, 2, 3]);
+  const infSeq = 5::repeat();
+  const l = mori.list(1, 2, 3);
+  const v = mori.vector(1, 2, 3);
+  const m = mori.hashMap('foo', 1, 'bar', 2);
+  const s = mori.set('a', 'b', 'c');
+
   describe(`::isList`, function () {
-    it(`should check whether collection is a list`, function () {
-      void mori.list(1, 2, 3)::isList()::should().be.true;
-      void mori.vector(1, 2, 3)::isList()::should().be.false;
+    it(`should test for list`, function () {
+      void l::isList()
+        ::should().be.true;
+      void v::isList()
+        ::should().be.false;
     });
   });
+
   describe(`::isSeq`, function () {
-    it(`should check whether collection is a seq`, function () {
-      void mori.seq([1, 2, 3])::isSeq()::should().be.true;
-      void mori.vector(1, 2, 3)::isSeq()::should().be.false;
+    it(`should test for seq`, function () {
+      void coercedSeq::isSeq()
+        ::should().be.true;
+      void v::isSeq()
+        ::should().be.false;
+    });
+  });
+
+  describe('::isMap', function () {
+    it('map is map', function () {
+      void m::isMap()
+        ::should().be.true;
+    });
+    it('list is not map', function () {
+      void l::isMap()
+        ::should().be.false;
+    });
+  });
+
+  describe('::isSet', function () {
+    it('should test for set', function () {
+      void s::isSet()
+        ::should().be.true;
+      void l::isSet()
+        ::should().be.false;
+    });
+  });
+
+  describe('::isCollection', function () {
+    it('should test for collection', function () {
+      void m::isCollection()
+        ::should().be.true;
+      void 1::isCollection()
+        ::should().be.false;
+    });
+  });
+
+  describe('::isSequential', function () {
+    it('should test for sequential', function () {
+      void v::isSequential()
+        ::should().be.true;
+      void s::isSequential()
+        ::should().be.false;
+    });
+  });
+
+  describe('::isAssociative', function () {
+    it('should test for associativity', function () {
+      void m::isAssociative()
+        ::should().be.true;
+      void l::isAssociative()
+        ::should().be.false;
+    });
+  });
+
+  describe('::isCounted', function () {
+    it('infinite seq is not counted', function () {
+      void infSeq::isCounted()
+        ::should().be.false;
+    });
+    it('vector is counted', function () {
+      void v::isCounted()
+        ::should().be.true;
+    });
+  });
+
+  describe('::isIndexed', function () {
+    it('should test for indexed', function () {
+      void v::isIndexed()
+        ::should().be.true;
+      void l::isIndexed()
+        ::should().be.false;
+    });
+  });
+
+  describe('::isReduceable', function () {
+    it('should test for reducability', function () {
+      void 1::isReduceable()
+        ::should().be.false;
+      void l::isReduceable()
+        ::should().be.true;
+      void v::isReduceable()
+        ::should().be.true;
+    });
+  });
+
+  describe('::isSeqable', function () {
+    it('should test for seqability', function () {
+      void 1::isSeqable()
+        ::should().be.false;
+      void l::isSeqable()
+        ::should().be.true;
+      void v::isSeqable()
+        ::should().be.true;
+    });
+  });
+
+  describe('::isReversible', function () {
+    it('should test for reversibility', function () {
+      void l::isReversible()
+        ::should().be.false;
+      void v::isReversible()
+        ::should().be.true;
     });
   });
 });
 
 
 describe(`mori collection operations`, function () {
+
   describe(`::conj`, function () {
     it(`should conjoin the supplied item(s) to the collection`, function () {
       void mori.vector(1, 2)::conj(3, 4, 5)::equals(mori.vector(1, 2, 3, 4, 5))
@@ -176,6 +289,7 @@ describe(`mori collection operations`, function () {
         ::should().be.true;
     });
   });
+
   describe(`::into`, function () {
     it(`should iteratively conjoin the supplied item(s)
         to the collection`, function () {
@@ -192,6 +306,7 @@ describe(`mori collection operations`, function () {
         ::should().be.true;
     });
   });
+
   describe(`::assoc`, function () {
     it(`should associate values into an associative collection`, function () {
       const v = mori.vector('foo', 'bar', 'baz');
@@ -205,11 +320,242 @@ describe(`mori collection operations`, function () {
         ::should().be.true;
     });
   });
+
+  describe('::dissoc', function () {
+    it('should dissassociate', function () {
+      var m = mori.hashMap('foo', 1, 'bar', 2, 'baz', 3);
+      void m::dissoc('bar', 'baz')::equals(mori.hashMap('foo', 1))
+        ::should().be.true;
+    });
+  });
+
+  describe('::distinct', function () {
+    it('should remove duplicates and return a seq', function () {
+      const arr = [1, 1, 2, 3, 2];
+      const set = mori.set(arr);
+      const vec = mori.vector(...arr);
+      set::toJs()::should().deep.equal(vec::distinct()::toJs());
+      void set::seq()::equals(vec::distinct())::should().be.true;
+    });
+  });
+
+  describe('::empty', function () {
+    it('should empty the collection', function () {
+      void mori.vector(1, 2)::empty()::equals(mori.vector())
+        ::should().be.true;
+    });
+  });
+
+  describe('::get', function () {
+    const v = mori.vector(10, 11, 12);
+    const m = mori.hashMap('foo', 1, 'bar', 2);
+
+    it('should retrive a value based on key', function () {
+      v::get(0)::should().equal(10);
+      m::get('bar')::should().equal(2);
+    });
+
+    it('should default to the value supplied', function () {
+      v::get(3, 30)::should().equal(30);
+      m::get('quux', 'baz')::should().equal('baz');
+    });
+  });
+
+  describe('::getIn', function () {
+    const v = mori.vector('foo', 'bar', 'baz');
+    const v2 = mori.vector('quux', v);
+    const m = mori.hashMap('foo', 1, 'bar', 2);
+    const m2 = mori.hashMap('baz', 3, 'quux', m);
+
+    it('should retrive the nested value', function () {
+      v2::getIn([1, 2])::should().equal('baz');
+      m2::getIn(['quux', 'bar'])::should().equal(2);
+    });
+    it('should default to the supplied argument', function () {
+      const notFound = 'default';
+      v2::getIn([999, 888], notFound)::should().equal(notFound);
+    });
+  });
+
+  describe('::hasKey', function () {
+    const v = mori.vector(1);
+
+    it('should tell whether the key exists', function () {
+      void v::hasKey(0)::should().be.true;
+      void v::hasKey(999)::should().be.false;
+    });
+  });
+
+  describe('::find', function () {
+    it('should find the element based on key', function () {
+      const m = mori.hashMap('foo', 1, 'bar', 2);
+
+      m::find('foo')::toJs()::should().deep.equal(['foo', 1]);
+      void m::find('quux')::should().be.null;
+    });
+  });
+
+  describe('::nth', function () {
+    it('should get the nth element', function () {
+      const v = mori.vector('foo', 'bar', 'baz');
+      v::nth(1)::should().equal('bar');
+    });
+  });
+
+  describe('::last', function () {
+    it('should get the last element', function () {
+      mori.vector(1, 2, 3)::last()::should().equal(3);
+    });
+  });
+
+  describe('::assocIn', function () {
+    it('should ', function () {
+      const m = mori.hashMap('foo', mori.hashMap('bar', 1));
+      m::assocIn(['foo', 'baz'], 2)::get('foo')
+        ::toJs()
+        ::should().deep.equal({bar: 1, baz: 2});
+    });
+  });
+
+  describe('::updateIn', function () {
+    it('should ', function () {
+      const m = mori.hashMap('foo', mori.hashMap('bar', 1));
+      m::updateIn(['foo', 'bar'], mori.inc)::get('foo')
+        ::toJs()
+        ::should().deep.equal({bar: 2});
+    });
+  });
+
+  describe('::count', function () {
+    it('should tell the length', function () {
+      mori.vector(0, 0, 0)::count()
+        ::should().equal(3);
+    });
+  });
+
+  describe('::peek', function () {
+    it('should show the "first" item in the sequence', function () {
+      mori.list('foo', 'bar', 'baz')::peek()
+        ::should().equal('foo');
+      mori.vector('foo', 'bar', 'baz')::peek()
+        ::should().equal('baz');
+    });
+  });
+
+  describe('::pop', function () {
+    it('should ', function () {
+      mori.list('foo', 'bar', 'baz')::pop()
+        ::toJs()
+        ::should().deep.equal(['bar', 'baz']);
+      mori.vector('foo', 'bar', 'baz')::pop()
+        ::toJs()
+        ::should().deep.equal(['foo', 'bar']);
+    });
+  });
+
+  describe('::zipmap', function () {
+    it('should zip two seqables into a hash map', function () {
+      const keyz = ['foo', 'bar', 'baz'];
+      const valz = [1, 2, 3];
+      const hmap = keyz::zipmap(valz);
+      hmap::toJs()::should().deep.equal({foo: 1, bar: 2, baz: 3});
+    });
+  });
+
+  describe('::reverse', function () {
+    it('should ', function () {
+      mori.vector(1, 2, 3)::reverse()
+        ::toJs()
+        ::should().deep.equal([3, 2, 1]);
+    });
+  });
+});
+
+
+
+describe('mori hash map operations', function () {
+  const hmap = mori.hashMap('foo', 1, 'bar', 2);
+
+  describe('::keys', function () {
+    it('should give us a sequence of the keys', function () {
+      void hmap::keys()
+        ::equals(mori.list('foo', 'bar'))
+        ::should().be.true;
+    });
+  });
+
+  describe('::vals', function () {
+    it('should give us a sequence of the values', function () {
+      void hmap::vals()
+        ::equals(mori.list(1, 2))
+        ::should().be.true;
+    });
+  });
+
+  describe('::merge', function () {
+    it('should merge two maps', function () {
+      void hmap::merge(mori.hashMap('baz', 3))
+        ::toJs()
+        ::should().deep.equal({
+          foo: 1,
+          bar: 2,
+          baz: 3,
+        });
+    });
+  });
+});
+
+describe('mori set operations', function () {
+
+  describe('::disj', function () {
+    it('should remove an element from a set', function () {
+      void mori.set([1, 2, 3])::disj(3)
+        ::equals(mori.set([1, 2]))
+        ::should().be.true;
+    });
+  });
+
+  describe('::union', function () {
+    it('should return the union of two or more sets', function () {
+      void mori.set([1, 2])::union(mori.set([2, 3]), mori.set([3, 4]))
+        ::equals(mori.set([1, 2, 3, 4]))
+        ::should().be.true;
+    });
+  });
+
+  describe('::', function () {
+    it('should ', function () {
+    });
+  });
+
+  describe('::', function () {
+    it('should ', function () {
+    });
+  });
+
+  describe('::', function () {
+    it('should ', function () {
+    });
+  });
+
+  describe('::', function () {
+    it('should ', function () {
+    });
+  });
 });
 
 describe(`mori sequences`, function () {
 
   const arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+  describe('::seq', function () {
+    it('should create a seq', function () {
+      const seq1 = [1, 2, 3]::seq();
+      const seq2 = mori.vector(1, 2, 3)::seq();
+      void seq1::toJs()::should().deep.equal(seq2::toJs());
+      void seq1::equals(seq2)::should().be.true;
+    });
+  });
 
   describe('::cons', function () {
     it('should construct a new sequence', function () {
@@ -232,6 +578,40 @@ describe(`mori sequences`, function () {
       ps::toJs()::should().deep.equal(
         [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 8], [8, 9]]
       );
+    });
+  });
+});
+
+describe('mori helpers', function () {
+  describe('::isOdd', function () {
+    it('should tell us that odd numbers are odd', function () {
+      const check = b => b::should().be.true;
+      mori.vector(3::isOdd(), 7::isOdd(), 9::isOdd())::each(check);
+    });
+    it('should tell us that even numbers are not odd', function () {
+      const check = b => b::should().be.false;
+      mori.vector(2::isOdd(), 4::isOdd(), 8::isOdd())::each(check);
+    });
+  });
+
+  describe('::pipeline', function () {
+    it('should thread a value through supplied functions', function () {
+      const {vector, conj, inc} = mori;
+      const result = vector(1, 2, 3)::pipeline(
+        conj::curry(4),
+        conj::curry(5)
+      );
+
+      result::toJs()::should().deep.equal([1, 2, 3, 4, 5]);
+
+      const ops = inc::repeat(3)::toJs();
+      const num = 0::pipeline(...[inc, inc, inc]);
+      num::should().equal(3);
+    });
+  });
+
+  describe('::', function () {
+    it('should ', function () {
     });
   });
 });

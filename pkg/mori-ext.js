@@ -97,7 +97,7 @@ var get = ternaryFunc('get');
 exports.get = get;
 var getIn = ternaryFunc('getIn');
 exports.getIn = getIn;
-var hasKey = binaryFunc('hasKey ');
+var hasKey = binaryFunc('hasKey');
 exports.hasKey = hasKey;
 var find = binaryFunc('find');
 exports.find = find;
@@ -131,14 +131,14 @@ exports.subvec = subvec;
 // Hash Map Operations
 var keys = unaryFunc('keys');
 exports.keys = keys;
-var vals = unaryFunc('keys');
+var vals = unaryFunc('vals');
 exports.vals = vals;
-var merge = variadicFunc('keys');
+var merge = variadicFunc('merge');
 exports.merge = merge;
 // --
 
 // Set Operations
-var disj = unaryFunc('disj');
+var disj = binaryFunc('disj');
 exports.disj = disj;
 var union = variadicFunc('union');
 exports.union = union;

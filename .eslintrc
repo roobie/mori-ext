@@ -22,5 +22,7 @@ rules:
   no-undef: 0 #disallow use of undeclared variables unless mentioned in a /*global */ block
   yoda: 0
 
+  comma-dangle: 0
+
   #Stylistic Issues
   quotes: [0, "backtick"] #specify whether double or single quotes should be used

@@ -68,7 +68,7 @@ export const distinct = unaryFunc('distinct');
 export const empty = unaryFunc('empty');
 export const get = ternaryFunc('get');
 export const getIn = ternaryFunc('getIn');
-export const hasKey = binaryFunc('hasKey ');
+export const hasKey = binaryFunc('hasKey');
 export const find = binaryFunc('find');
 export const nth = binaryFunc('nth');
 export const last = unaryFunc('last');
@@ -88,12 +88,12 @@ export const subvec = ternaryFunc('subvec');
 
 // Hash Map Operations
 export const keys = unaryFunc('keys');
-export const vals = unaryFunc('keys');
-export const merge = variadicFunc('keys');
+export const vals = unaryFunc('vals');
+export const merge = variadicFunc('merge');
 // --
 
 // Set Operations
-export const disj = unaryFunc('disj');
+export const disj = binaryFunc('disj');
 export const union = variadicFunc('union');
 export const intersection = variadicFunc('intersection');
 export const difference = variadicFunc('difference');

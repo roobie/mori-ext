@@ -38,11 +38,15 @@ gulp.task('watch-js', function () {
 gulp.task('spec', function () {
   return gulp.src('spec/*.js', {read: false})
     // gulp-mocha needs filepaths so you can't have any plugins before it
-    .pipe(mocha({reporter: 'spec'}));
+    .pipe(mocha({
+      //reporter: 'spec'
+      //reporter: 'nyan'
+      reporter: 'progress'
+    }));
 });
 
 gulp.task('watch-spec', function () {
-    gulp.watch(['spec/*.js'], ['js', 'spec']);
+    gulp.watch(['src/*.js', 'spec/*.js'], ['js', 'spec']);
 });
 
 

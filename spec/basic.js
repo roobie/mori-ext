@@ -563,6 +563,20 @@ describe(`mori sequences`, function () {
     });
   });
 
+  describe('::repeat', function () {
+    it('should work', function () {
+      const foos = 'foo'::repeat();
+      void [1, 2, 3]::zipmap(foos)
+        .toString()::should().equal('{1 "foo", 2 "foo", 3 "foo"}');
+    });
+    it('should also work', function () {
+      // only two repeats
+      const foos = 'foo'::repeat(2);
+      void [1, 2, 3]::zipmap(foos)
+        .toString()::should().equal('{1 "foo", 2 "foo"}');
+    });
+  });
+
   describe(`::partition`, function () {
     it(`should partition the collection`, function () {
       const ps = arr::partition(2);
@@ -596,17 +610,27 @@ describe('mori helpers', function () {
 
   describe('::pipeline', function () {
     it('should thread a value through supplied functions', function () {
-      const {vector, conj, inc} = mori;
+      // for some reason, I get this error when doing this
+      // const {vector, $conj} = mori;
+      // ```
+      // TypeError: Cannot read property 'i' of undefined
+      // at W._variadic (C:/Users/Administrator/Documents/mori-ext/src/mori-ext.js:34:21)
+      // ```
+      const {vector, conj} = mori; // eslint-disable-line no-shadow
       const result = vector(1, 2, 3)::pipeline(
         conj::curry(4),
         conj::curry(5)
       );
 
       result::toJs()::should().deep.equal([1, 2, 3, 4, 5]);
+    });
 
-      const ops = inc::repeat(3)::toJs();
-      const num = 0::pipeline(...[inc, inc, inc]);
-      num::should().equal(3);
+    it('threading primitive values? No problem', function () {
+      const target = 9;
+      const {range, inc} = mori; // eslint-disable-line no-shadow
+      const ops = range(target)::zipmap(inc::repeat())::vals()::toJs();
+      const num = 0::pipeline(...ops);
+      num::should().equal(target);
     });
   });
 

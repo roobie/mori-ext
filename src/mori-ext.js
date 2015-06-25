@@ -153,13 +153,19 @@ export const interleave = variadicFunc('interleave');
 // function first
 export const iterate = binaryFunc('iterate');
 
-// val first, first param  optional
-// 'foo'::repeat() // mori.repeat('foo')
-// 5::repeat('foo') // mori.repeat(5, 'foo')
-export const repeat = binaryFunc('repeat');
+// val first, first param optional
+// since first param is optional, we have to do it differently
+// 'foo'::repeat() // mori.repeat('foo', void)
+// 'foo'::repeat(5) // mori.repeat(5, 'foo')
+export const repeat = function mrepeat(p) {
+  return p ? mori.repeat(p, this) : mori.repeat(this);
+};
 
-// function first, first param  optional
-export const repeatedly = binaryFunc('repeatedly');
+// function first, first param optional
+// since first param is optional, we have to do it differently
+export const repeatedly = function mrepeatedly(p) {
+  return p ? mori.repeatedly(p, this) : mori.repeatedly(this);
+};
 
 export const partition = variadicFunc('partition', true);
 export const partitionBy = binaryFunc('partitionBy', true);

@@ -694,6 +694,80 @@ describe(`mori sequences`, function () {
     });
   });
 
+  describe('::remove', function () {
+    it('should remove items based on pred', function () {
+      const pred = (item) => item < 4;
+      const not = function () {
+        const fn = this;
+        return function (a) {
+          return !fn(a);
+        };
+      };
+      vec::remove(pred)::toJs()::should().deep.equal(arr.filter(pred::not()));
+    });
+  });
+
+  describe('::reduce', function () {
+    it('should reduce a seq with the given fn', function () {
+      const {range} = mori;
+      range(10)::reduce(mori.sum, 0)::should().equal(45);
+    });
+  });
+
+  describe('::reduceKV', function () {
+    it('should reduce map-like collections', function () {
+      const f = function(acc, key, val) {
+        return `${acc}(${key}:${val})`;
+      };
+
+      var m = mori.hashMap("foo", 1, "bar", 2);
+      m::reduceKV(f, "")::should().equal('(foo:1)(bar:2)');
+    });
+  });
+
+  describe('::take', function () {
+    it('should take n elements', function () {
+      mori.range()::take(arr.length)
+      ::intoArray()::should().deep.equal(arr);
+    });
+  });
+
+  describe('::', function () {
+    it('should ', function () {
+
+    });
+  });
+
+  describe('::', function () {
+    it('should ', function () {
+
+    });
+  });
+
+  describe('::', function () {
+    it('should ', function () {
+
+    });
+  });
+
+  describe('::', function () {
+    it('should ', function () {
+
+    });
+  });
+
+  describe('::', function () {
+    it('should ', function () {
+
+    });
+  });
+
+  describe('::', function () {
+    it('should ', function () {
+
+    });
+  });
+
   describe('::', function () {
     it('should ', function () {
 
@@ -758,14 +832,16 @@ describe(`mori sequences`, function () {
 });
 
 describe('mori helpers', function () {
+  const {vector} = mori;
+
   describe('::isOdd', function () {
     it('should tell us that odd numbers are odd', function () {
       const check = b => b::should().be.true;
-      mori.vector(3::isOdd(), 7::isOdd(), 9::isOdd())::each(check);
+      vector(3::isOdd(), 7::isOdd(), 9::isOdd())::each(check);
     });
     it('should tell us that even numbers are not odd', function () {
       const check = b => b::should().be.false;
-      mori.vector(2::isOdd(), 4::isOdd(), 8::isOdd())::each(check);
+      vector(2::isOdd(), 4::isOdd(), 8::isOdd())::each(check);
     });
   });
 

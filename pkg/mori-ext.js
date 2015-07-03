@@ -192,12 +192,16 @@ exports.filter = filter;
 var remove = binaryFunc('remove', true);
 
 exports.remove = remove;
-// function first
-var reduce = ternaryFunc('reduce', true);
+// function first -> special
+var reduce = function reduce(func, initial) {
+  return _mori2['default'].reduce(func, initial, this);
+};
 
 exports.reduce = reduce;
 // function first
-var reduceKV = ternaryFunc('reduceKV', true);
+var reduceKV = function reduceKV(func, initial) {
+  return _mori2['default'].reduceKV(func, initial, this);
+};
 
 exports.reduceKV = reduceKV;
 var take = binaryFunc('take', true);

@@ -129,11 +129,15 @@ export const mapcat = variadicFunc('mapcat');
 export const filter = binaryFunc('filter', true);
 export const remove = binaryFunc('remove', true);
 
-// function first
-export const reduce = ternaryFunc('reduce', true);
+// function first -> special
+export const reduce = function reduce(func, initial) {
+  return mori.reduce(func, initial, this);
+};
 
 // function first
-export const reduceKV = ternaryFunc('reduceKV', true);
+export const reduceKV = function reduceKV(func, initial) {
+  return mori.reduceKV(func, initial, this);
+};
 
 export const take = binaryFunc('take', true);
 export const takeWhile = binaryFunc('takeWhile', true);

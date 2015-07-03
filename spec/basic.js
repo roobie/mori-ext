@@ -732,21 +732,24 @@ describe(`mori sequences`, function () {
     });
   });
 
-  describe('::', function () {
+  describe('::takeWhile', function () {
     it('should ', function () {
-
+      mori.range()::takeWhile(x => x < 5)::intoArray()
+      ::should().deep.equal([0, 1, 2, 3, 4]);
     });
   });
 
-  describe('::', function () {
-    it('should ', function () {
-
+  describe('::drop', function () {
+    it('should drop based on pred', function () {
+      mori.range()::drop(5)::take(5)::intoArray()
+      ::should().deep.equal([5, 6, 7, 8, 9]);
     });
   });
 
-  describe('::', function () {
+  describe('::dropWhile', function () {
     it('should ', function () {
-
+      mori.range()::dropWhile(x => x < 5)::take(5)::intoArray()
+      ::should().deep.equal([5, 6, 7, 8, 9]);
     });
   });
 
@@ -847,12 +850,6 @@ describe('mori helpers', function () {
 
   describe('::pipeline', function () {
     it('should thread a value through supplied functions', function () {
-      // for some reason, I get this error when doing this
-      // const {vector, $conj} = mori;
-      // ```
-      // TypeError: Cannot read property 'i' of undefined
-      // at W._variadic (C:/Users/Administrator/Documents/mori-ext/src/mori-ext.js:34:21)
-      // ```
       const {vector, conj} = mori; // eslint-disable-line no-shadow
       const result = vector(1, 2, 3)::pipeline(
         conj::curry(4),

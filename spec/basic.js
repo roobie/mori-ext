@@ -613,12 +613,6 @@ describe(`mori sequences`, function () {
     });
   });
 
-  describe('::', function () {
-    it('should ', function () {
-
-    });
-  });
-
   describe('::seq', function () {
     it('should create a seq', function () {
       const seq1 = arr::seq();
@@ -630,7 +624,103 @@ describe(`mori sequences`, function () {
 
   describe('::cons', function () {
     it('should construct a new sequence', function () {
-      1::cons(mori.vector(2, 3))::toJs()::should().deep.equal([1, 2, 3]);
+      1::cons(vector(2, 3))::toJs()::should().deep.equal([1, 2, 3]);
+    });
+  });
+
+  describe('::concat', function () {
+    it('should concat', function () {
+      vec::concat(vec)
+      ::toJs()
+      ::should().deep.equal(arr.concat(arr));
+    });
+  });
+
+  describe('::flatten', function () {
+    it('should flatten the seq', function () {
+      vector(vec, vec)::flatten()
+      ::toJs()
+      ::should().deep.equal(arr.concat(arr));
+    });
+  });
+
+  describe('::intoArray', function () {
+    it('should compute the JS array non lazily', function () {
+      mori.inc::map(arr)::intoArray()
+      ::should().deep.equal(arr.map(function (n) {
+        return n::inc();
+      }));
+    });
+  });
+
+  describe('::each', function () {
+    it('should iterate and allow side effects', function () {
+      const check = [];
+      vec::each((n) => check.push(n));
+      check::should().deep.equal(arr);
+    });
+  });
+
+  describe('::map', function () {
+    it('should map a func over any number of seqs', function () {
+      const func = mori.vector;
+      const a1 = [0, 1, 2];
+      const a2 = [3, 4, 5];
+
+      const result = func::map(a1, a2);
+      result::toJs()::should().deep.equal([
+        [0, 3],
+        [1, 4],
+        [2, 5]
+      ]);
+    });
+  });
+
+  describe('::mapcat', function () {
+    it('should map and cat', function () {
+      const func = (q, w) => mori.list(q, q + w);
+      const s1 = Number::map('123'::seq());
+      const s2 = Number::map('345'::seq());
+
+      const result = func::mapcat(s1, s2);
+      result::toJs()::should().deep.equal([1, 4, 2, 6, 3, 8]);
+    });
+  });
+
+  describe('::filter', function () {
+    it('should filter a seq', function () {
+      const pred = (item) => item < 4;
+      vec::filter(pred)::toJs()::should().deep.equal(arr.filter(pred));
+    });
+  });
+
+  describe('::', function () {
+    it('should ', function () {
+
+    });
+  });
+
+  describe('::', function () {
+    it('should ', function () {
+
+    });
+  });
+
+  describe('::', function () {
+    it('should ', function () {
+
+    });
+  });
+
+  describe('::', function () {
+    it('should ', function () {
+
+    });
+  });
+
+  describe('::', function () {
+    it('should ', function () {
+
     });
   });
 

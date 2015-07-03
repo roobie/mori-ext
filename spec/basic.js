@@ -178,6 +178,15 @@ describe(`mori type predicates`, function () {
     });
   });
 
+  describe(`::isVector`, function () {
+    it(`should test for vector`, function () {
+      void v::isVector()
+        ::should().be.true;
+      void l::isVector()
+        ::should().be.false;
+    });
+  });
+
   describe('::isMap', function () {
     it('map is map', function () {
       void m::isMap()
@@ -433,6 +442,15 @@ describe(`mori collection operations`, function () {
     });
   });
 
+  describe('::isEmpty', function () {
+    it('should tell whether it is empty or not', function () {
+      void mori.vector(0, 0, 0)::isEmpty()
+        ::should().be.false;
+      void mori.vector()::isEmpty()
+        ::should().be.true;
+    });
+  });
+
   describe('::peek', function () {
     it('should show the "first" item in the sequence', function () {
       mori.list('foo', 'bar', 'baz')::peek()
@@ -505,11 +523,24 @@ describe('mori hash map operations', function () {
   });
 });
 
+describe('mori vector operations', function () {
+  const {vector} = mori;
+
+  describe('::subvec', function () {
+    it('should slice a vector', function () {
+      void vector('cat', 'dog', 'bunny', 'cow')::subvec(1, 3)
+        ::toJs()
+        ::should().deep.equal(['dog', 'bunny']);
+    });
+  });
+});
+
 describe('mori set operations', function () {
+  const {set} = mori;
 
   describe('::disj', function () {
     it('should remove an element from a set', function () {
-      void mori.set([1, 2, 3])::disj(3)
+      void set([1, 2, 3])::disj(3)
         ::equals(mori.set([1, 2]))
         ::should().be.true;
     });
@@ -517,41 +548,81 @@ describe('mori set operations', function () {
 
   describe('::union', function () {
     it('should return the union of two or more sets', function () {
-      void mori.set([1, 2])::union(mori.set([2, 3]), mori.set([3, 4]))
-        ::equals(mori.set([1, 2, 3, 4]))
+      void set([1, 2])::union(set([2, 3]), mori.set([3, 4]))
+        ::equals(set([1, 2, 3, 4]))
         ::should().be.true;
     });
   });
 
-  describe('::', function () {
-    it('should ', function () {
+  describe('::intersection', function () {
+    it('should intersect two or more sets', function () {
+      void set([1, 2, 3])::intersection(set([2, 3, 4]))
+        ::equals(set([2, 3]))
+        ::should().be.true;
     });
   });
 
-  describe('::', function () {
-    it('should ', function () {
+  describe('::difference', function () {
+    it('should return the difference of two or more sets', function () {
+      void set([1, 3])::difference(set([3, 1]))
+        .toString()
+        ::should().equal('#{}');
     });
   });
 
-  describe('::', function () {
-    it('should ', function () {
-    });
-  });
+  describe('-->', function () {
+    const sup = set([1, 2, 3]);
+    const sub = set([2, 3]);
+    const notSub = set([3, 4]);
 
-  describe('::', function () {
-    it('should ', function () {
+    describe('::isSubset', function () {
+      it('should tell whether the set is a subset of the other', function () {
+        void sub::isSubset(sup)::should().be.true;
+        void sup::isSubset(sup)::should().be.true;
+        void notSub::isSubset(sup)::should().be.false;
+      });
+    });
+
+    describe('::isSuperset', function () {
+      it('should tell whether the set is a superset of the other', function () {
+        void sub::isSuperset(sup)::should().be.false;
+        void sup::isSuperset(sup)::should().be.true;
+        void sup::isSuperset(sub)::should().be.true;
+      });
     });
   });
 });
 
 describe(`mori sequences`, function () {
-
+  const {vector} = mori;
   const arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const vec = vector(...arr);
+
+  describe('::first', function () {
+    it('should get the first element', function () {
+      vec::first()
+      ::should().equal(arr[0]);
+    });
+  });
+
+  describe('::rest', function () {
+    it('should get the rest of the elements', function () {
+      vec::rest()
+      ::toJs()
+      ::should().deep.equal(arr.slice(1));
+    });
+  });
+
+  describe('::', function () {
+    it('should ', function () {
+
+    });
+  });
 
   describe('::seq', function () {
     it('should create a seq', function () {
-      const seq1 = [1, 2, 3]::seq();
-      const seq2 = mori.vector(1, 2, 3)::seq();
+      const seq1 = arr::seq();
+      const seq2 = vector(...arr)::seq();
       void seq1::toJs()::should().deep.equal(seq2::toJs());
       void seq1::equals(seq2)::should().be.true;
     });

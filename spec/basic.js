@@ -25,6 +25,7 @@ import {
   isReversible,
 
 // Collections
+// these are imported locally in below scopes
 
   // list,
   // vector,
@@ -753,51 +754,73 @@ describe(`mori sequences`, function () {
     });
   });
 
-  describe('::', function () {
-    it('should ', function () {
-
+  describe('::some', function () {
+    it('should return the first non falsy value that the supplied predicate returns', function () {
+      void vec::some((x) => x === 3 && 3)
+      ::should().equal(3);
+      void vec::some((x) => x === -1)
+      ::should().be.falsy;
     });
   });
 
-  describe('::', function () {
-    it('should ', function () {
-
+  describe('::every', function () {
+    it('should check whether all elements satisfy the supplied predicate', function () {
+      void vec::every((x) => x > -1)
+      ::should().be.true;
     });
   });
 
-  describe('::', function () {
-    it('should ', function () {
+  describe('::sort', function () {
+    it('should sort the collection and return a sequence', function () {
+      const desc = (a, b) => b - a;
 
+      arr::sort()::intoArray()
+      ::should().deep.equal(arr);
+
+      arr::sort(desc)::intoArray()
+      ::should().deep.equal(arr.slice(0).sort(desc));
     });
   });
 
-  describe('::', function () {
-    it('should ', function () {
+  describe('::sortBy', function () {
+    it('should sort by the values from a key function', function () {
+      const l = [0, 1, 2, 3, 4, 5, 6];
+      const kf = (x) => x * 5 % 7;
+      const desc = (a, b) => b - a;
 
+      kf::map(l).toString()
+      ::should().equal('(0 5 3 1 6 4 2)');
+
+      l::sortBy(kf).toString()::should().equal('(0 3 6 2 5 1 4)');
+      l::sortBy(kf, desc).toString()::should().equal('(4 1 5 2 6 3 0)');
     });
   });
 
-  describe('::', function () {
+  describe('::interpose', function () {
     it('should ', function () {
+      const a = [1, 2, 3];
 
+      a::interpose('foo')
+      .toString()::should().equal('(1 "foo" 2 "foo" 3)');
     });
   });
 
-  describe('::', function () {
+  describe('::interleave', function () {
     it('should ', function () {
+      const ns = [1, 2, 3];
+      const as = ['a', 'b', 'c'];
 
+      ns::interleave(as)
+      .toString()::should().equal('(1 "a" 2 "b" 3 "c")');
+
+      as::interleave(ns)
+      .toString()::should().equal('("a" 1 "b" 2 "c" 3)');
     });
   });
 
-  describe('::', function () {
+  describe('::iterate', function () {
     it('should ', function () {
-
-    });
-  });
-
-  describe('::', function () {
-    it('should ', function () {
-
+      mori.inc::iterate(0)::take(4)::intoArray()::should().deep.equal([0, 1, 2, 3]);
     });
   });
 
@@ -812,6 +835,17 @@ describe(`mori sequences`, function () {
       const foos = 'foo'::repeat(2);
       void [1, 2, 3]::zipmap(foos)
         .toString()::should().equal('{1 "foo", 2 "foo"}');
+    });
+  });
+
+  describe('::repeatedly', function () {
+    it('should ', function () {
+      let counter = 0;
+      const incr = function () {
+        counter++;
+        return counter;
+      };
+      incr::repeatedly(3).toString()::should().equal('(1 2 3)');
     });
   });
 
@@ -832,10 +866,83 @@ describe(`mori sequences`, function () {
       );
     });
   });
+
+  describe('::partitionBy', function () {
+    it('should ', function () {
+      var v = vector("foo", "bar", "baz", "grapefruit");
+      var f = (s) => s[0];
+
+      v::partitionBy(f).toString()
+      ::should().equal('(("foo") ("bar" "baz") ("grapefruit"))');
+    });
+  });
+
+  describe('::groupBy', function () {
+    it('should ', function () {
+      const {range} = mori;
+      const evenOdd = (n) => n::isEven() ? "even" : "odd";
+      const r = range(10);
+
+      r::groupBy(evenOdd).toString()
+      ::should().equal('{"even" [0 2 4 6 8], "odd" [1 3 5 7 9]}');
+    });
+  });
+
 });
 
 describe('mori helpers', function () {
-  const {vector} = mori;
+  const {vector, range} = mori;
+
+
+  describe('::primSeq', function () {
+    it('should make a seq of an array like object', function () {
+      let called = false;
+      const t = function () {
+        arguments::primSeq()::first()::should().equal(1);
+        called = true;
+      };
+      t(1);
+      void called::should().be.true;
+    });
+  });
+
+  describe('::identity', function () {
+    it('should return the value of its first parameter', function () {
+      1::identity()::should().equal(1);
+    });
+  });
+
+  describe('::constantly', function () {
+    it('should ', function () {
+      "foo"::constantly()::map(range(4)).toString()
+      ::should().equal('("foo" "foo" "foo" "foo")');
+    });
+  });
+
+  describe('::inc', function () {
+    it('should increment', function () {
+      0::inc()::should().equal(1);
+    });
+  });
+
+  describe('::dec', function () {
+    it('should ', function () {
+      1::dec()::should().equal(0);
+    });
+  });
+
+  describe('::sum', function () {
+    it('should ', function () {
+      1::sum(2)::should().equal(3);
+    });
+  });
+
+  describe('::isEven', function () {
+    it('should ', function () {
+      const check = b => b::should().be.true;
+      vector(2::isEven(), 4::isEven(), 8::isEven())::each(check);
+    });
+  });
 
   describe('::isOdd', function () {
     it('should tell us that odd numbers are odd', function () {
@@ -845,6 +952,29 @@ describe('mori helpers', function () {
     it('should tell us that even numbers are not odd', function () {
       const check = b => b::should().be.false;
       vector(2::isOdd(), 4::isOdd(), 8::isOdd())::each(check);
+    });
+  });
+
+  describe('::comp', function () {
+    it('should compose', function () {
+      mori.isOdd::comp(mori.inc)::map([1, 2, 3]).toString()
+      ::should().equal('(false true false)');
+    });
+  });
+
+  describe('::juxt', function () {
+    it('should ', function () {
+      const f = mori.first::juxt(mori.last);
+      f([1, 2, 3, 4, 5, 6])::should().deep.equal([1, 6]);
+    });
+  });
+
+  describe('::knit', function () {
+    it('should ', function () {
+      const loCase = (s) => s.toLowerCase();
+      const upCase = (s) => s.toUpperCase();
+      const f = loCase::knit(upCase);
+      f(["FoO", "bAr"])::should().deep.equal(['foo', 'BAR']);
     });
   });
 
@@ -868,7 +998,59 @@ describe('mori helpers', function () {
     });
   });
 
-  describe('::', function () {
+  describe('::partial', function () {
+    it('should ', function () {
+      const f = mori.conj::partial(vector(1, 2, 3));
+
+      f(5).toString()
+      ::should().equal('[1 2 3 5]');
+    });
+  });
+
+  describe('::curry', function () {
+    it('should ', function () {
+    });
+  });
+
+  describe('::fnil', function () {
+    it('should return x if parameter is null', function () {
+      const {hashMap} = mori;
+      const f = (x) => {
+        return x::updateIn(["count"], mori.inc::fnil(0));
+      };
+
+      f(hashMap()).toString()::should().equal('{"count" 1}');
+    });
+
+    it('should guard a function', function () {
+      const f = (x) => x + 3;
+      const gf = f::fnil(0);
+
+      gf()::should().equal(3);
+      gf(1)::should().equal(4);
+    });
+
+    it('should allow two arguments', function () {
+      const f = (a, b) => a + b;
+      const gf = f::fnil(1, 1);
+
+      gf()::should().equal(2);
+      gf(3)::should().equal(4);
+    });
+  });
+
+  describe('::toClj', function () {
+    it('should ', function () {
+      const {hashMap} = mori;
+      const data = {
+        foo: 'bar'
+      };
+
+      void data::toClj()::equals(hashMap('foo', 'bar'))::should().be.true;
+    });
+  });
+
+  describe('::toJs', function () {
     it('should ', function () {
     });
   });

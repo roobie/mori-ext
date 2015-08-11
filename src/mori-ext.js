@@ -146,11 +146,19 @@ export const dropWhile = binaryFunc('dropWhile', true);
 export const some = binaryFunc('some', true);
 export const every = binaryFunc('every', true);
 
-// function first
-export const sort = binaryFunc('sort');
+// optional function first
+export const sort = function sort(cmp) {
+  return cmp ?
+    mori.sort(cmp, this) :
+    mori.sort(this);
+};
 
-// function first
-export const sortBy = ternaryFunc('sortBy');
+// function first, optional second parameter, coll
+export const sortBy = function sortBy(keyFn, cmp) {
+  return cmp ?
+    mori.sortBy(keyFn, cmp, this) :
+    mori.sortBy(keyFn, this);
+};
 export const interpose = binaryFunc('interpose', true);
 export const interleave = variadicFunc('interleave');
 

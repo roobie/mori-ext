@@ -217,12 +217,16 @@ exports.some = some;
 var every = binaryFunc('every', true);
 
 exports.every = every;
-// function first
-var sort = binaryFunc('sort');
+// optional function first
+var sort = function sort(cmp) {
+  return cmp ? _mori2['default'].sort(cmp, this) : _mori2['default'].sort(this);
+};
 
 exports.sort = sort;
-// function first
-var sortBy = ternaryFunc('sortBy');
+// function first, optional second parameter, coll
+var sortBy = function sortBy(keyFn, cmp) {
+  return cmp ? _mori2['default'].sortBy(keyFn, cmp, this) : _mori2['default'].sortBy(keyFn, this);
+};
 exports.sortBy = sortBy;
 var interpose = binaryFunc('interpose', true);
 exports.interpose = interpose;

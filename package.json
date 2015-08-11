@@ -1,6 +1,6 @@
 {
   "name": "mori-ext",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "Function bind syntax for mori",
   "main": "pkg/mori-ext.js",
   "scripts": {

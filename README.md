@@ -47,7 +47,7 @@ babel-runtime,
 
 ## Usage
 
-[Review the spec](https://github.com/roobie/mori-ext/blob/master/spec/basic.js) (the spec is as of this moment not complete, but it's on its way)
+[Review the spec](https://github.com/roobie/mori-ext/blob/master/spec/basic.js) (covers the majority of the API)
 
 # API
 `mori-ext`'s  API is mostly based on collections being the first argument to `mori` functions, i.e.

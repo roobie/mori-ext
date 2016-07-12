@@ -1,10 +1,3 @@
-{
-  "stage": 0,
-  "sourceMaps": true,
-  "optional": [
-    "runtime"
-  ],
-  "ignore": [
-    "node_modules/**/*"
-  ]
+{ "presets": ["es2015"],
+  "plugins": ["transform-function-bind"]
 }
